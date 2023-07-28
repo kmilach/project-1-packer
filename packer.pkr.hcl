@@ -25,15 +25,10 @@ build {
   ]
 
   provisioner "shell" {
-    inline = ["sudo yum install python3-pip"]
-  }
-
-  provisioner "shell" {
-    inline = ["pip install ansible"]
-  }
-
-  provisioner "shell" {
-    inline = ["which ansible-playbook"]
+    inline = [
+      "sudo yum install python3-pip -y",
+      "pip install ansible"
+    ]
   }
 
   provisioner "ansible-local" {
