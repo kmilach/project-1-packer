@@ -1,11 +1,11 @@
 ---
 - 
   name: AMI Provisioning
-  hosts: all
+  hosts: localhost
   become: true
   connection: local
   vars:
-    AWS-INSPECTOR: https://inspector-agent.amazonaws.com/linux/latest/install
+    AWS_INSPECTOR: https://inspector-agent.amazonaws.com/linux/latest/install
 
   tasks:
     - name: Update all current packages
