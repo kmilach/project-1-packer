@@ -10,13 +10,13 @@ pipeline {
         stage('Build AMI image') {
             steps {
                 echo "Initializing and installing Packer plugins..."
-                sh "/usr/bin/packer init /vagrant/devops-project/packer.pkr.hcl"
+                sh "/usr/bin/packer init packer.pkr.hcl"
 
                 echo "Validating the Packer configuration..."
-                sh "/usr/bin/packer validate /vagrant/devops-project/packer.pkr.hcl"
+                sh "/usr/bin/packer validate packer.pkr.hcl"
 
                 echo "Build AMI image with Packer..."
-                sh "/usr/bin/packer build /vagrant/devops-project/packer.pkr.hcl"
+                sh "/usr/bin/packer build packer.pkr.hcl"
             }
         }
     }
