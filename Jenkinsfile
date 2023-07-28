@@ -13,7 +13,7 @@ pipeline {
                 sh "/usr/bin/packer init packer.pkr.hcl"
 
                 echo "Build AMI image with Packer..."
-                sh "/usr/bin/packer build -var 'ansible_playbook=playbook.yml' packer.pkr.hcl"
+                sh "/usr/bin/packer build packer.pkr.hcl"
             }
         }
     }
