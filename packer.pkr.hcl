@@ -31,8 +31,8 @@ build {
 
   provisioner "shell" {
     inline = [
-      "yum install python3-pip -y",
-      "pip install ansible"
+      "sudo yum install python3-pip -y",
+      "sudo pip install ansible"
     ]
   }
 
