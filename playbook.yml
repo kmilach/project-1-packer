@@ -5,7 +5,11 @@
   become: true
   connection: local
   vars:
-    AWS_INSPECTOR: https://inspector-agent.amazonaws.com/linux/latest/install
+    GPG_CLOUDWATCH: https://s3.amazonaws.com/amazoncloudwatch-agent/assets/amazon-cloudwatch-agent.gpg
+    RPM_CLOUDWATCH: https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm
+    RPM_SSM: https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
+    URL_INSPECTOR: https://inspector-agent.amazonaws.com/linux/latest/install
+
 
   tasks:
     - name: Update all current packages
@@ -13,14 +17,19 @@
         name: '*'
         state: latest
 
+    - name: Import GPG key for Cloudwatch agent
+      rpm_key:
+        key: "{{ GPG_CLOUDWATCH }}"
+        state: present
+
     - name: Install prerequisite packages
       yum:
         name: "{{ PACKAGES }}"
       vars:
         PACKAGES:
           - git
-          - https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm
-          - https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
+          - "{{ RPM_CLOUDWATCH }}"
+          - "{{ RPM_SSM }}"
 
     - name: Start SSM service
       systemd:
