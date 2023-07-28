@@ -36,7 +36,7 @@ build {
     inline = ["which ansible-playbook"]
   }
 
-  provisioner "ansible" {
+  provisioner "ansible-local" {
     playbook_file = "playbook.yml"
   }
 }
