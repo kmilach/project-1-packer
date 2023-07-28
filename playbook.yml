@@ -1,0 +1,55 @@
+---
+- 
+  name: AMI Provisioning
+  hosts: all
+  become: true
+  connection: local
+  vars:
+    AWS-INSPECTOR: https://inspector-agent.amazonaws.com/linux/latest/install
+
+  tasks:
+    - name: Update all current packages
+      yum:
+        name: '*'
+        state: latest
+
+    - name: Install prerequisite packages
+      yum:
+        name: "{{ PACKAGES }}"
+      vars:
+        PACKAGES:
+          - git
+          - https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm
+          - https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
+
+    - name: Start SSM service
+      systemd:
+        name: amazon-ssm-agent
+        state: started
+        enabled: true
+
+    - name: Start Cloudwatch agent
+      shell:
+        cmd: |
+          /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -m ec2 -a start
+          /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -m ec2 -a status
+
+    - name: Download AWS inspector
+      get_url:
+        url: "{{ AWS-INSPECTOR }}"
+        dest: /tmp/install
+
+    - name: Install AWS inspector
+      shell:
+        cmd: bash /tmp/install
+
+    - name: Install Docker
+      yum:
+        name: docker
+        state: latest
+
+    - name: Start Docker service
+      systemd:
+        name: docker
+        state: started
+        enable: true
