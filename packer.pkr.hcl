@@ -24,6 +24,18 @@ build {
     "source.amazon-ebs.amazon-ami-linux"
   ]
 
+  provisioner "shell" {
+    inline = ["sudo yum install python3-pip"]
+  }
+
+  provisioner "shell" {
+    inline = ["pip install ansible"]
+  }
+
+  provisioner "shell" {
+    inline = ["which ansible-playbook"]
+  }
+
   provisioner "ansible" {
     playbook_file = "playbook.yml"
   }
