@@ -31,7 +31,7 @@ build {
     ]
   }
 
-  provisioner "ansible-local" {
+  provisioner "ansible" {
     playbook_file = "playbook.yml"
   }
 }
