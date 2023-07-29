@@ -5,9 +5,7 @@
   become: true
   connection: local
   vars:
-    RPM_SSM: https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
     URL_INSPECTOR: https://inspector-agent.amazonaws.com/linux/latest/install
-
 
   tasks:
     - name: Update all current packages
@@ -22,11 +20,11 @@
         PACKAGES:
           - git
           - amazon-cloudwatch-agent
-          - "{{ RPM_SSM }}"
+          - amazon-ssm-agent
 
-    - name: Start SSM service
+    - name: Start Cloudwatch service
       systemd:
-        name: amazon-ssm-agent
+        name: amazon-cloudwatch-agent
         state: started
         enabled: true
 
@@ -36,14 +34,11 @@
           /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -m ec2 -a start
           /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -m ec2 -a status
 
-    - name: Download AWS inspector
-      get_url:
-        url: "{{ AWS-INSPECTOR }}"
-        dest: /tmp/install
-
-    - name: Install AWS inspector
-      shell:
-        cmd: bash /tmp/install
+    - name: Start SSM service
+      systemd:
+        name: amazon-ssm-agent
+        state: started
+        enabled: true
 
     - name: Install Docker
       yum:
