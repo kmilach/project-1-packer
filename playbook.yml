@@ -49,4 +49,4 @@
       systemd:
         name: docker
         state: started
-        enable: true
+        enabled: true
